@@ -1,38 +1,44 @@
 package com.revolut.money_transfer;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static io.restassured.RestAssured.get;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+
+import org.jooby.test.JoobyRule;
+import org.jooby.test.MockRouter;
+import org.junit.ClassRule;
+import org.junit.Test;
+
+import com.revolut.money_transfer.internal.App;
 
 /**
- * Unit test for simple App.
+ * @author jooby generator
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public class AppTest {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+  /**
+   * One app/server for all the test of this class. If you want to start/stop a new server per test,
+   * remove the static modifier and replace the {@link ClassRule} annotation with {@link Rule}.
+   */
+  @ClassRule
+  public static JoobyRule app = new JoobyRule(new App());
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+  @Test
+  public void integrationTest() {
+    get("/")
+        .then()
+        .assertThat()
+        .body(equalTo("Hello World!"))
+        .statusCode(200)
+        .contentType("text/html;charset=UTF-8");
+  }
+
+  @Test
+  public void unitTest() throws Throwable {
+    String result = new MockRouter(new App())
+        .get("/");
+
+    assertEquals("Hello World!", result);
+  }
+
 }
