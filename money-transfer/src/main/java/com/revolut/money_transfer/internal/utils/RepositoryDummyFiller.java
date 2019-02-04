@@ -9,24 +9,17 @@ import com.revolut.money_transfer.internal.repository.AccountRepository;
 
 import javassist.bytecode.stackmap.TypeData.ClassName;
 
-public class RepositoryFillerImpl implements RepositoryFiller {
+public class RepositoryDummyFiller{
 	private static final Logger LOGGER = Logger.getLogger(ClassName.class.getName());
 
-	private AccountRepository accountRepository;
-
-	public RepositoryFillerImpl(AccountRepository accountRepository) {
-		this.accountRepository = accountRepository;
+	public static void fillAccounts(AccountRepository accountRepository) {
+		createAccount(accountRepository, "542312353523512352352355", BigDecimal.ZERO);
+		createAccount(accountRepository, "215323513254756783547563", BigDecimal.ZERO);
+		createAccount(accountRepository, "109010140000071219811234", new BigDecimal(200));
+		createAccount(accountRepository, "122124124214214214214421", new BigDecimal(1000));
 	}
 
-	@Override
-	public void fillDummyAccounts() {
-		createAccount("542312353523512352352355", BigDecimal.ZERO);
-		createAccount("215323513254756783547563", BigDecimal.ZERO);
-		createAccount("109010140000071219811234", new BigDecimal(200));
-		createAccount("122124124214214214214421", new BigDecimal(1000));
-	}
-
-	private void createAccount(String accountNumber, BigDecimal balance) {
+	private static void createAccount(AccountRepository accountRepository, String accountNumber, BigDecimal balance) {
 		try {
 			accountRepository.createAccount(accountNumber, balance);
 		} catch (AccountNumberDuplicateException e) {
