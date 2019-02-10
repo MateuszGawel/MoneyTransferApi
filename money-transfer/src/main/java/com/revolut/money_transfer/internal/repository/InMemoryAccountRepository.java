@@ -17,14 +17,20 @@ public class InMemoryAccountRepository implements AccountRepository{
 	private Map<String, Account> accounts = new ConcurrentHashMap<>();
 	
 	@Override
-	public void createAccount(String accountNumber, BigDecimal balance) throws AccountNumberDuplicateException {
+	public void createAccount(String accountNumber, BigDecimal initBalance) throws AccountNumberDuplicateException {
+		if(accountNumber == null) {
+			throw new IllegalArgumentException("Account number must be provided");
+		}
+		
+		if(initBalance == null) {
+			initBalance = BigDecimal.ZERO;
+		}
+			
 		if(accounts.containsKey(accountNumber)) {
 			throw new AccountNumberDuplicateException("Account number " + accountNumber + " is not unique.");
 		}
 		
-		Account account = new Account();
-		account.setNumber(accountNumber);
-		account.setBalance(balance);
+		Account account = new Account(accountNumber, initBalance);
 		accounts.put(accountNumber, account);
 	}
 
@@ -36,10 +42,6 @@ public class InMemoryAccountRepository implements AccountRepository{
 	@Override
 	public Collection<Account> getAll() {
 		return accounts.values();
-	}
-	
-	public void updateBalance(String accountNumber, BigDecimal balance) {
-//		accounts.computeIfPresent(accountNumber, (k, v) -> v.setBalance(balance));
 	}
 
 }

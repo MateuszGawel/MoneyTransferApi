@@ -7,10 +7,8 @@ import java.util.logging.Logger;
 import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateException;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
 
-import javassist.bytecode.stackmap.TypeData.ClassName;
-
 public class RepositoryDummyFiller{
-	private static final Logger LOGGER = Logger.getLogger(ClassName.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(RepositoryDummyFiller.class.getName());
 
 	public static void fillAccounts(AccountRepository accountRepository) {
 		createAccount(accountRepository, "542312353523512352352355", BigDecimal.ZERO);

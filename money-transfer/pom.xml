@@ -44,6 +44,20 @@
             <groupId>org.jooby</groupId>
             <artifactId>jooby-jackson</artifactId>
         </dependency>
+		<!-- dependency>
+			<groupId>org.mapdb</groupId>
+			<artifactId>thread-weaver</artifactId>
+			<version>3.0.mapdb</version>
+			<scope>test</scope>
+		</dependency-->
+		
+		<!--dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency-->
+		
 	</dependencies>
 
 	<build>
