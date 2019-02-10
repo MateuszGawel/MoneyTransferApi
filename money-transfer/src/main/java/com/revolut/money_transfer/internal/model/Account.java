@@ -1,6 +1,7 @@
 package com.revolut.money_transfer.internal.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +42,7 @@ public class Account {
 	}
 	
 	private void logTransaction(String transactionType, BigDecimal amount) {
-		LOGGER.log(Level.INFO, transactionType + " [Account: " + number + ", Amount: " + amount + " CurrentBalance: " + balance + "]");
+		LOGGER.log(Level.INFO, transactionType + " [Account: " + number + ", Amount: " + amount.setScale(2, RoundingMode.HALF_DOWN) + " CurrentBalance: " + balance.setScale(2, RoundingMode.HALF_DOWN) + "]");
 	}
 
 	@Override

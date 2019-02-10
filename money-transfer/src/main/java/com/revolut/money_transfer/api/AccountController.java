@@ -35,22 +35,29 @@ public class AccountController {
 
 	@GET
 	public List<AccountDto> getAll() {
-		return accountRepository.getAll().stream().map(AccountConverter::convertFromAccount).collect(Collectors.toList());
+		return accountRepository
+				.getAll()
+				.stream()
+				.map(AccountConverter::convertFromAccount)
+				.collect(Collectors.toList());
 	}
 
 	@Path("/{accountnumber}")
 	@GET
 	public AccountDto getByAccountNumber(String accountnumber) {
-		return accountRepository.getByAccountNumber(accountnumber).map(AccountConverter::convertFromAccount).orElseThrow(() -> new Err(Status.NOT_FOUND));
+		return accountRepository
+				.getByAccountNumber(accountnumber)
+				.map(AccountConverter::convertFromAccount)
+				.orElseThrow(() -> new Err(Status.NOT_FOUND));
 	}
 
 	@Path("/moneytransfer")
-	@POST //TODO patch?
+	@POST
 	public Result makeTransfer(@Body MoneyTransferRequest moneyTransferRequest) {
 		try {
 			moneyTransferService.transferMoney(moneyTransferRequest.getFromAccount(), moneyTransferRequest.getToAccount(), moneyTransferRequest.getAmount());
 		} catch (AccountNotFoundException | NotEnoughMoneyException e) {
-			Results.with(Status.SERVER_ERROR);//TODO some description?
+			Results.with(Status.SERVER_ERROR);
 		}
 		return Results.ok();
 	}

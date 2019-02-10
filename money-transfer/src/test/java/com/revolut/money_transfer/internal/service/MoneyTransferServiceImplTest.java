@@ -57,7 +57,7 @@ public class MoneyTransferServiceImplTest {
 	@Test
 	public void testMoneyTransfer_OK2() throws AccountNotFoundException, NotEnoughMoneyException {
 		//GIVEN
-		final BigDecimal transferAmount = new BigDecimal(1499);
+		final BigDecimal transferAmount = new BigDecimal(12.98);
 		
 		//WHEN
 		moneyTransferService.transferMoney(account1.getNumber(), account2.getNumber(), transferAmount);

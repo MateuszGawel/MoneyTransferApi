@@ -1,19 +1,17 @@
 package com.revolut.money_transfer.api;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({ "number", "balance" })
 public class AccountDto {
 
 	private String number;
-	private BigDecimal balance;
+	private String balance;
 
 	public AccountDto() {
 	}
 
-	public AccountDto(String number, BigDecimal balance) {
+	public AccountDto(String number, String balance) {
 		this.number = number;
 		this.balance = balance;
 	}
@@ -26,11 +24,11 @@ public class AccountDto {
 		this.number = number;
 	}
 
-	public BigDecimal getBalance() {
+	public String getBalance() {
 		return balance;
 	}
 
-	public void setBalance(BigDecimal balance) {
+	public void setBalance(String balance) {
 		this.balance = balance;
 	}
 
