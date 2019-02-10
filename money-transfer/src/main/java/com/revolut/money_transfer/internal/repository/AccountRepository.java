@@ -11,4 +11,5 @@ public interface AccountRepository {
 	void createAccount(String accountNumber, BigDecimal balance) throws AccountNumberDuplicateException;
 	Optional<Account> getByAccountNumber(String accountNumber);
 	Collection<Account> getAll();
+	void clear();
 }

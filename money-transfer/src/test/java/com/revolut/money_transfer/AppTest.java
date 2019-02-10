@@ -1,45 +1,28 @@
 package com.revolut.money_transfer;
 
 import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static io.restassured.config.JsonConfig.jsonConfig;
 import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.math.BigDecimal;
 
-import org.hamcrest.Matchers;
 import org.jooby.Status;
 import org.jooby.test.JoobyRule;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import com.revolut.money_transfer.api.MoneyTransferRequest;
 import com.revolut.money_transfer.internal.App;
 import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateException;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
-import com.revolut.money_transfer.internal.repository.InMemoryAccountRepository;
-import static io.restassured.RestAssured.*;
-import static io.restassured.config.JsonConfig.jsonConfig;
-import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
-import static org.hamcrest.Matchers.*;
+
 import io.restassured.RestAssured;
-import io.restassured.RestAssured;
-
-import org.jooby.test.JoobyRule;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
-import static io.restassured.RestAssured.*;
-import static io.restassured.config.JsonConfig.jsonConfig;
-import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
-import static org.hamcrest.Matchers.*;
 
 public class AppTest {
 
@@ -48,8 +31,14 @@ public class AppTest {
 	public static JoobyRule joobyRule = new JoobyRule(app);
 
 	@BeforeClass
-	public static void config() {
+	public static void config() throws AccountNumberDuplicateException {
 		RestAssured.config = RestAssured.config().jsonConfig(jsonConfig().numberReturnType(BIG_DECIMAL));
+		clearRepository();
+		createAccount("111", BigDecimal.ONE);
+		createAccount("222", BigDecimal.TEN);
+		createAccount("333", BigDecimal.ZERO);
+		createAccount("444", new BigDecimal(5.12));
+		createAccount("555", new BigDecimal(0.10));
 	}
 
 	@Test
@@ -70,43 +59,95 @@ public class AppTest {
 
 	@Test
 	public void testGetAll() throws AccountNumberDuplicateException {
-		createAccount("111", BigDecimal.ZERO);
-		createAccount("222", BigDecimal.ZERO);
-		createAccount("333", BigDecimal.ZERO);
-		createAccount("444", BigDecimal.ZERO);
-		createAccount("555", BigDecimal.ZERO);
 
 		when()
 			.get("/accounts")
 			.then()
 			.assertThat()
-			.body("$", hasSize(5));
+			.body("number", hasItems("111", "222", "333", "444", "555"));
 		
 	}
 	
 	@Test
-    public void testGetAccount() throws AccountNumberDuplicateException {
-
-		createAccount("111", BigDecimal.ONE);
-		createAccount("222", BigDecimal.TEN);
+    public void testGetAccount111() {
 
         when()
             .get("/accounts/111")
             .then()
             .body("number", is("111"))
-            .body("balance", is("1.00"));
-
+            .body("balance", is("1,00"));
+	}
+	
+	@Test
+    public void testGetAccount222() {
         when()
 	        .get("/accounts/222")
 	        .then()
 	        .body("number", is("222"))
-	        .body("balance", is("10.00"));
+	        .body("balance", is("10,00"));
+	}
+	
+	@Test
+    public void testGetAccount333() {
+        when()
+	        .get("/accounts/333")
+	        .then()
+	        .body("number", is("333"))
+	        .body("balance", is("0,00"));
+	}
+	
+	@Test
+    public void testGetAccount444() {
+        when()
+	        .get("/accounts/444")
+	        .then()
+	        .body("number", is("444"))
+	        .body("balance", is("5,12"));
+	}
+	
+	@Test
+    public void testGetAccount555() {
+        when()
+	        .get("/accounts/555")
+	        .then()
+	        .body("number", is("555"))
+	        .body("balance", is("0,10"));
     }
+	
+	@Test
+	public void testTransfer() {
+		MoneyTransferRequest request = new MoneyTransferRequest();
+		request.setFromAccount("222");
+		request.setToAccount("333");
+		request.setAmount(new BigDecimal(0.01));
+		
+		given()
+			.when()
+		        .body(request)
+		        .contentType("application/json")
+		        .post("/accounts/moneytransfer")
+		        .then().statusCode(200);
+		
+		// VERIFY
+        when()
+	        .get("/accounts/222")
+	        .then()
+	        .body("balance", is("9,99"));
+        
+        when()
+	        .get("/accounts/333")
+	        .then()
+	        .body("balance", is("0,01"));
+	}
 	
 	
 
-	private void createAccount(String accountNumber, BigDecimal balance) throws AccountNumberDuplicateException {
+	private static void createAccount(String accountNumber, BigDecimal balance) throws AccountNumberDuplicateException {
 		app.require(AccountRepository.class).createAccount(accountNumber, balance);
+	}
+	
+	private static void clearRepository() {
+		app.require(AccountRepository.class).clear();
 	}
 
 }

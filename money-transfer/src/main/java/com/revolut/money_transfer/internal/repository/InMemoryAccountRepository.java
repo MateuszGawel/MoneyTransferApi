@@ -43,5 +43,10 @@ public class InMemoryAccountRepository implements AccountRepository{
 	public Collection<Account> getAll() {
 		return accounts.values();
 	}
+	
+	@Override
+	public void clear() {
+		accounts.clear();
+	}
 
 }
