@@ -37,7 +37,7 @@ public class MoneyTransferServiceImplMultithreadTest {
 	public void testMultithreadingTransfer() {
 		AnnotatedTestRunner runner = new AnnotatedTestRunner();
 		HashSet<String> methods = new HashSet<String>();
-		methods.add("com.revolut.money_transfer.internal.service.MoneyTransferServiceImpl.transferMoney");
+		methods.add("com.revolut.money_transfer.internal.service.impl.MoneyTransferServiceImpl.transferMoney");
 		runner.setMethodOption(MethodOption.LISTED_METHODS, methods);
 		runner.setDebug(true);
 		runner.runTests(this.getClass(), MoneyTransferServiceImpl.class);

@@ -53,7 +53,7 @@ public class AccountController {
 
 	@Path("/moneytransfer")
 	@POST
-	public Result moneyTransfer(@Body MoneyTransferRequest moneyTransferRequest) throws AccountNotFoundException, NotEnoughMoneyException {
+	public Result transferMoney(@Body MoneyTransferRequest moneyTransferRequest) throws AccountNotFoundException, NotEnoughMoneyException {
 		moneyTransferService.transferMoney(moneyTransferRequest.getFromAccount(), moneyTransferRequest.getToAccount(), moneyTransferRequest.getAmount());
 		return Results.ok();
 	}
