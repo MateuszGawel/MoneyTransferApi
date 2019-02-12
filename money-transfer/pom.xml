@@ -19,7 +19,7 @@
 
 	<properties>
 		<jooby.version>1.5.1</jooby.version>
-		<application.class>com.revolut.money_transfer</application.class>
+		<application.class>com.revolut.money_transfer.App</application.class>
 	</properties>
 
 	<dependencies>
