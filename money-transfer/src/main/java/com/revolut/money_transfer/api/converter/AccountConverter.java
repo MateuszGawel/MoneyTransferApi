@@ -2,6 +2,8 @@ package com.revolut.money_transfer.api.converter;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import com.revolut.money_transfer.api.AccountDto;
 import com.revolut.money_transfer.internal.model.Account;

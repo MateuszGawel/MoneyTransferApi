@@ -53,11 +53,11 @@ public class AccountController {
 
 	@Path("/moneytransfer")
 	@POST
-	public Result makeTransfer(@Body MoneyTransferRequest moneyTransferRequest) {
+	public Result moneyTransfer(@Body MoneyTransferRequest moneyTransferRequest) {
 		try {
 			moneyTransferService.transferMoney(moneyTransferRequest.getFromAccount(), moneyTransferRequest.getToAccount(), moneyTransferRequest.getAmount());
 		} catch (AccountNotFoundException | NotEnoughMoneyException e) {
-			Results.with(Status.SERVER_ERROR);
+			return Results.with(Status.SERVER_ERROR);
 		}
 		return Results.ok();
 	}

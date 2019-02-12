@@ -1,4 +1,4 @@
-package com.revolut.money_transfer.internal;
+package com.revolut.money_transfer;
 
 import org.jooby.Jooby;
 import org.jooby.json.Jackson;
