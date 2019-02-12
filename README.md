@@ -63,6 +63,11 @@ returns all accounts from repository
    ```
    mvn jooby:run
    ```
+   
+   To build you can use
+   ```
+   mvn clean install
+   ```
    * Maven 3 is required
    
    # Additional notes
@@ -73,5 +78,5 @@ returns all accounts from repository
    - InMemoryAccountRepository stores Accounts in ConcurrentHashMap which locks on bucket level, what is enough, or even more than enough, because of further thread locking. Key is an accountnumber to ease getting accounts by their numbers.
    - Jooby handles requests in async way. Money transfer could cause many threads related issues so thread safe approach is required.
    - MoneyTransferService locks on Accounts always in the same order, to avoid deadlock and perform withdraw and deposit operations safely.
-   - Exceptions are described and sent as a response to indicate error source. It is jooby feature
+   - Exceptions are described and sent as a response to indicate error source - it is jooby feature. I left stacktrace printed, knowing that in real application it shouldn't appear.
    - Test contains standard junits with edge cases, integration tests of RESTful API and multithreading tests which correctly simulated potential multithreading issues.
