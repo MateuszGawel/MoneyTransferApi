@@ -19,7 +19,13 @@ public class InMemoryAccountRepository implements AccountRepository{
 	
 	@Override
 	public void createAccount(String accountNumber, BigDecimal initBalance) throws AccountNumberDuplicateException {
-		validateInput(accountNumber);
+		if(accountNumber == null) {
+			throw new IllegalArgumentException("Account number must be provided");
+		}
+					
+		if(accounts.containsKey(accountNumber)) {
+			throw new AccountNumberDuplicateException("Account number " + accountNumber + " is not unique.");
+		}
 		
 		if(initBalance == null) {
 			initBalance = BigDecimal.ZERO;
@@ -29,18 +35,11 @@ public class InMemoryAccountRepository implements AccountRepository{
 		accounts.put(accountNumber, account);
 	}
 
-	private void validateInput(String accountNumber) throws AccountNumberDuplicateException {
+	@Override
+	public Optional<Account> getByAccountNumber(String accountNumber) {
 		if(accountNumber == null) {
 			throw new IllegalArgumentException("Account number must be provided");
 		}
-					
-		if(accounts.containsKey(accountNumber)) {
-			throw new AccountNumberDuplicateException("Account number " + accountNumber + " is not unique.");
-		}
-	}
-
-	@Override
-	public Optional<Account> getByAccountNumber(String accountNumber) {
 		return Optional.ofNullable(accounts.get(accountNumber));
 	}
 

@@ -52,8 +52,8 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
 	}
 
 	private void validateInput(String accountFrom, String accountTo, BigDecimal amount) {
-		if(amount.compareTo(BigDecimal.ZERO) <= 0) {
-			throw new IllegalArgumentException("Provided amount must be positive!");
+		if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new IllegalArgumentException("Provided amount must be provided and must be positive!");
 		}
 		
 		if(accountFrom == null || accountTo == null || accountFrom.equals(accountTo)) {

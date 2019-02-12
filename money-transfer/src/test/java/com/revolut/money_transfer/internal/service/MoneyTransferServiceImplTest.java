@@ -116,6 +116,18 @@ public class MoneyTransferServiceImplTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
+	public void testMoneyTransfer_nullAmount() throws AccountNotFoundException, NotEnoughMoneyException {
+		//GIVEN
+		final BigDecimal transferAmount = null;
+		
+		//WHEN
+		moneyTransferService.transferMoney(account1.getNumber(), account2.getNumber(), transferAmount);
+		
+		//THEN
+		verifyPerformedTransactions(transferAmount);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
 	public void testMoneyTransfer_zeroAmount() throws AccountNotFoundException, NotEnoughMoneyException {
 		//GIVEN
 		final BigDecimal transferAmount = BigDecimal.ZERO;

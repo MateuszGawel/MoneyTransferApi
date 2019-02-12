@@ -120,6 +120,14 @@ public class AppTest {
     }
 	
 	@Test
+    public void testGetAccount_notExistingNumber() {
+        when()
+	        .get("/accounts/123")
+	        .then()
+			.statusCode(Status.NOT_FOUND.value());
+    }
+	
+	@Test
 	public void testTransfer() {
 		MoneyTransferRequest request = new MoneyTransferRequest();
 		request.setFromAccount("222");
