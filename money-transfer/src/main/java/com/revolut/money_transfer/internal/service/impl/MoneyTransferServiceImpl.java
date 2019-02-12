@@ -1,4 +1,4 @@
-package com.revolut.money_transfer.internal.service;
+package com.revolut.money_transfer.internal.service.impl;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
@@ -10,6 +10,7 @@ import com.revolut.money_transfer.internal.exception.AccountNotFoundException;
 import com.revolut.money_transfer.internal.exception.NotEnoughMoneyException;
 import com.revolut.money_transfer.internal.model.Account;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
+import com.revolut.money_transfer.internal.service.MoneyTransferService;
 
 @Singleton
 public class MoneyTransferServiceImpl implements MoneyTransferService {
@@ -22,18 +23,12 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
 	}
 
 	@Override
-	public void transferMoney(String accountFrom, String accountTo, BigDecimal amount) throws AccountNotFoundException, NotEnoughMoneyException {
+	public void transferMoney(String accountFromNumber, String accountToNumber, BigDecimal amount) throws AccountNotFoundException, NotEnoughMoneyException {
 		
-		if(amount.compareTo(BigDecimal.ZERO) <= 0) {
-			throw new IllegalArgumentException("Provided amount must be positive!");
-		}
+		validateInput(accountFromNumber, accountToNumber, amount);
 		
-		if(accountFrom == null || accountTo == null || accountFrom.equals(accountTo)) {
-			throw new IllegalArgumentException("Accounts must be provided and must be different");
-		}
-		
-		Account fromAccount = getAccountByNumber(accountFrom);
-		Account toAccount = getAccountByNumber(accountTo);
+		Account fromAccount = getAccountByNumber(accountFromNumber);
+		Account toAccount = getAccountByNumber(accountToNumber);
 
 		// get locks always in the same order to avoid deadlock
 		Account firstLock = fromAccount.getNumber().compareTo(toAccount.getNumber()) > 0 ? fromAccount : toAccount;
@@ -41,13 +36,28 @@ public class MoneyTransferServiceImpl implements MoneyTransferService {
 
 		synchronized (firstLock) {
 			synchronized (secondLock) {
-				if (fromAccount.isBalanceSufficientForWithdrawal(amount)) {
-					fromAccount.withdraw(amount);
-					toAccount.deposit(amount);
-				} else {
-					throw new NotEnoughMoneyException("Balance on account: " + fromAccount.getNumber() + " is not sufficient to transfer: " + amount);// TODO add currency
-				}
+				performTransfer(fromAccount, toAccount, amount);
 			}
+		}
+	}
+
+	private void performTransfer(Account fromAccount, Account toAccount, BigDecimal amount)
+			throws NotEnoughMoneyException {
+		if (fromAccount.isBalanceSufficientForWithdrawal(amount)) {
+			fromAccount.withdraw(amount);
+			toAccount.deposit(amount);
+		} else {
+			throw new NotEnoughMoneyException("Balance on account: " + fromAccount.getNumber() + " is not sufficient to transfer: " + amount);// TODO add currency
+		}
+	}
+
+	private void validateInput(String accountFrom, String accountTo, BigDecimal amount) {
+		if(amount.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new IllegalArgumentException("Provided amount must be positive!");
+		}
+		
+		if(accountFrom == null || accountTo == null || accountFrom.equals(accountTo)) {
+			throw new IllegalArgumentException("Accounts must be provided and must be different!");
 		}
 	}
 

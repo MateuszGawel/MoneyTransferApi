@@ -1,4 +1,4 @@
-package com.revolut.money_transfer.internal.repository;
+package com.revolut.money_transfer.internal.repository.impl;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateException;
 import com.revolut.money_transfer.internal.model.Account;
+import com.revolut.money_transfer.internal.repository.AccountRepository;
 
 @Singleton
 public class InMemoryAccountRepository implements AccountRepository{
@@ -18,20 +19,24 @@ public class InMemoryAccountRepository implements AccountRepository{
 	
 	@Override
 	public void createAccount(String accountNumber, BigDecimal initBalance) throws AccountNumberDuplicateException {
-		if(accountNumber == null) {
-			throw new IllegalArgumentException("Account number must be provided");
-		}
+		validateInput(accountNumber);
 		
 		if(initBalance == null) {
 			initBalance = BigDecimal.ZERO;
 		}
-			
-		if(accounts.containsKey(accountNumber)) {
-			throw new AccountNumberDuplicateException("Account number " + accountNumber + " is not unique.");
-		}
 		
 		Account account = new Account(accountNumber, initBalance);
 		accounts.put(accountNumber, account);
+	}
+
+	private void validateInput(String accountNumber) throws AccountNumberDuplicateException {
+		if(accountNumber == null) {
+			throw new IllegalArgumentException("Account number must be provided");
+		}
+					
+		if(accounts.containsKey(accountNumber)) {
+			throw new AccountNumberDuplicateException("Account number " + accountNumber + " is not unique.");
+		}
 	}
 
 	@Override

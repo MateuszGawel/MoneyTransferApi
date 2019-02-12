@@ -5,9 +5,9 @@ import org.jooby.json.Jackson;
 
 import com.revolut.money_transfer.api.AccountController;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
-import com.revolut.money_transfer.internal.repository.InMemoryAccountRepository;
+import com.revolut.money_transfer.internal.repository.impl.InMemoryAccountRepository;
 import com.revolut.money_transfer.internal.service.MoneyTransferService;
-import com.revolut.money_transfer.internal.service.MoneyTransferServiceImpl;
+import com.revolut.money_transfer.internal.service.impl.MoneyTransferServiceImpl;
 import com.revolut.money_transfer.internal.utils.RepositoryDummyFiller;
 
 public class App extends Jooby {

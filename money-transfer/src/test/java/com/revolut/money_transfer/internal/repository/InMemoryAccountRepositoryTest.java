@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateException;
 import com.revolut.money_transfer.internal.model.Account;
+import com.revolut.money_transfer.internal.repository.impl.InMemoryAccountRepository;
 
 public class InMemoryAccountRepositoryTest {
 	private static final String ACCOUNT_NO_1 = "1111111111";

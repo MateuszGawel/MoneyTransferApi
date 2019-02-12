@@ -7,9 +7,18 @@ import java.util.logging.Logger;
 import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateException;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
 
+/**
+ * Util class, responsible for filling account repository with initial data. Should not be used in production.
+ *
+ */
 public class RepositoryDummyFiller{
 	private static final Logger LOGGER = Logger.getLogger(RepositoryDummyFiller.class.getName());
 
+	/**
+	 * Fills repository with dummy initial data for testing purposes.
+	 * 
+	 * @param accountRepository repository to fill
+	 */
 	public static void fillAccounts(AccountRepository accountRepository) {
 		createAccount(accountRepository, "542312353523512352352355", BigDecimal.ZERO);
 		createAccount(accountRepository, "215323513254756783547563", BigDecimal.ZERO);

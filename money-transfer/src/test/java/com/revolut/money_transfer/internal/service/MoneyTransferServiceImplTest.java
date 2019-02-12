@@ -19,6 +19,7 @@ import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateExcep
 import com.revolut.money_transfer.internal.exception.NotEnoughMoneyException;
 import com.revolut.money_transfer.internal.model.Account;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
+import com.revolut.money_transfer.internal.service.impl.MoneyTransferServiceImpl;
 
 public class MoneyTransferServiceImplTest {
 	

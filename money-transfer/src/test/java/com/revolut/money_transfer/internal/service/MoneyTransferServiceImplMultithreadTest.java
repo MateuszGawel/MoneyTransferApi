@@ -18,7 +18,8 @@ import com.revolut.money_transfer.internal.exception.AccountNotFoundException;
 import com.revolut.money_transfer.internal.exception.AccountNumberDuplicateException;
 import com.revolut.money_transfer.internal.exception.NotEnoughMoneyException;
 import com.revolut.money_transfer.internal.repository.AccountRepository;
-import com.revolut.money_transfer.internal.repository.InMemoryAccountRepository;
+import com.revolut.money_transfer.internal.repository.impl.InMemoryAccountRepository;
+import com.revolut.money_transfer.internal.service.impl.MoneyTransferServiceImpl;
 
 public class MoneyTransferServiceImplMultithreadTest {
 	private static final Logger LOGGER = Logger.getLogger(MoneyTransferServiceImpl.class.getName());

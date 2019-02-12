@@ -23,7 +23,12 @@
 	</properties>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jooby</groupId>
@@ -47,9 +52,19 @@
 			<artifactId>jooby-jackson</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.mapdb</groupId>
+			<artifactId>thread-weaver</artifactId>
+			<version>3.0.mapdb</version>
+			<scope>test</scope>
+		</dependency>
 
-
-
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
